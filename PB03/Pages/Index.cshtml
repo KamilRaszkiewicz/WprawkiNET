@@ -27,5 +27,11 @@
         <div class="form-group pt-1 align-items-start d-flex justify-content-between">
             <input type="submit" class="btn btn-primary " value="Wyslij" />
         </div>
+        @if (Model.DateForm != null && ModelState.IsValid)
+        {
+            <div class="form-group pt-1">
+                <span class="form-control alert-success">@Html.DisplayFor(model => model.Message)</span>
+            </div>
+        }
     </form>
 </div>
