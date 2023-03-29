@@ -1,4 +1,46 @@
 ﻿@page
 @model PB03.Pages.ZapisaneModel
 @{
+    var list = Model.SessionData;
+}
+
+@if (list.Any())
+{
+    <ul class="list-group col-6 offset-3">
+        <li class="list-group-item list-group-item-primary">
+            <div class="row text-center">
+                <div class="col-1">
+                    Nr
+                </div>
+                <div class="col-4">
+                    Imię
+                </div>
+                <div class="col-4">
+                    Rok
+                </div>
+                <div class="col-3">
+                    Czy przestępny?
+                </div>
+            </div>
+        </li>
+        @for (int i = 0; i < list.Count; i++)
+        {
+            <li class="list-group-item">
+                <div class="row text-center">
+                    <div class="col-1">
+                        @(i + 1)
+                    </div>
+                    <div class="col-4 border-start">
+                        @list[i].Form.Name
+                    </div>
+                    <div class="col-4 border-start">
+                        @list[i].Form.Year
+                    </div>
+                    <div class="col-3 border-start">
+                        @(list[i].IsLeap ? "Rok przestępny" : "Rok nieprzestępny")
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
 }

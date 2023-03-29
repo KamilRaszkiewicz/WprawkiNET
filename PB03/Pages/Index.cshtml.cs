@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using PB03.App.Session;
 using PB03.Pages.Forms;
 
 namespace PB03.Pages
@@ -9,7 +10,7 @@ namespace PB03.Pages
         [BindProperty]
         public DateForm DateForm { get; set; }
 
-        public string Message => GetMessage(DateForm.Name, DateForm.Year);
+        public string Message => GetMessage();
         private readonly ILogger<IndexModel> _logger;
 
         public IndexModel(ILogger<IndexModel> logger)
@@ -17,18 +18,20 @@ namespace PB03.Pages
             _logger = logger;
         }
 
-        private string GetMessage(string name, int year)
+        private string GetMessage()
         {
             bool isGirl = false;
 
-            if (name.Last() == 'a')
+            if (DateForm.Name.Last() == 'a')
             {
                 isGirl = true;
             }
 
-            bool isLeap = DateTime.IsLeapYear(year);
+            bool isLeap = DateTime.IsLeapYear(DateForm.Year);
 
-            return $"{name} urodził{(isGirl ? "a" : string.Empty)} się w {DateForm.Year} roku. To {(isLeap ? "nie " : string.Empty)}był rok przestępny.";
+            HttpContext.Session.AddItem("forms", new SessionItem { Form = DateForm, IsLeap = isLeap});
+
+            return $"{DateForm.Name} urodził{(isGirl ? "a" : string.Empty)} się w {DateForm.Year} roku. To {(isLeap ? string.Empty : "nie ")}był rok przestępny.";
         }
 
         public IActionResult OnPost()
