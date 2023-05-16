@@ -2,3 +2,11 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+var deleteButtons = document.getElementsByClassName("delete-button");
+
+var deleteEntry = function (event) {
+    var entryId = event.target.getAttribute('data-entryId');
+
+}
+addEventListener()

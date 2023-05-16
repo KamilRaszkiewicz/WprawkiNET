@@ -1,49 +1,77 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using PB04.Models;
 using PB04.Pages.Forms;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
+using NuGet.Protocol.Core.Types;
+using PB04.Interfaces;
+using PB04.Models.Entities;
 
 namespace PB04.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
-        private readonly ApplicationDbContext _ctx;
-
-
-        public List<Person> People => _ctx.People.ToList();
-
         [BindProperty]
-        public PersonForm PersonForm { get; set; }
+        public DateForm DateForm { get; set; }
 
-        public IndexModel(ILogger<IndexModel> logger, ApplicationDbContext ctx)
+        public string Message => GetMessage();
+        private readonly UserManager<User> _userManager;
+        private readonly IRepository<LeapYearCheck> _leapYearCheckRepository;
+
+        public IndexModel(UserManager<User> userManager, IRepository<LeapYearCheck> leapYearCheckRepository)
         {
-            _logger = logger;
-            _ctx = ctx;
+            _userManager = userManager;
+            _leapYearCheckRepository = leapYearCheckRepository;
+        }
+
+        private string GetMessage()
+        {
+            bool isGirl = false;
+            var isLeap = DateTime.IsLeapYear(DateForm.Year);
+
+            if (DateForm.Name == null)
+            {
+                return $"{DateForm.Year} {(isLeap ? string.Empty : "nie")} był rokiem przestępnym";
+            }
+
+            if (DateForm.Name.Last() == 'a')
+            {
+                isGirl = true;
+            }
+            
+            return $"{DateForm.Name} urodził{(isGirl ? "a" : string.Empty)} się w {DateForm.Year} roku. To {(DateTime.IsLeapYear(DateForm.Year) ? string.Empty : "nie") }był rok przestępny.";
+        }
+
+        public IActionResult OnPost()
+        {
+            if(!ModelState.IsValid)
+            {
+                return Page();
+
+            }
+
+            var isLeap = DateTime.IsLeapYear(DateForm.Year);
+
+            int? userId = int.TryParse(_userManager.GetUserId(User), out var temp) ? temp : null;
+
+            var entity = new LeapYearCheck
+            {
+                UserId = userId,
+                Name = DateForm.Name,
+                Year = DateForm.Year,
+                IsLeap = isLeap,
+                CheckedAt = DateTime.Now
+            };
+
+            _leapYearCheckRepository.Add(entity);
+            _leapYearCheckRepository.SaveChanges();
+
+            return Page();
         }
 
         public void OnGet()
         {
 
-        }
-        
-        public IActionResult OnPost() 
-        {
-            if (!ModelState.IsValid)
-                return Page();
-
-
-            var person = new Person
-            {
-                FirstName = PersonForm.FirstName,
-                LastName = PersonForm.LastName,
-            };
-
-            _ctx.Add(person);
-            _ctx.SaveChanges();
-
-            return Page();
         }
     }
 }

@@ -1,15 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using PB04.Models.Entities;
 
 namespace PB04.Models
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
-        public DbSet<Person> People { get; set; }
+        public DbSet<User> People { get; set; }
+        public DbSet<LeapYearCheck> LeapYearChecks { get; set; }
 
         public ApplicationDbContext()
         {
-
         }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
         {

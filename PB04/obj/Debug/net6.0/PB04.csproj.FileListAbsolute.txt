@@ -85,3 +85,6 @@ C:\Users\Kamil\Desktop\repositories\pbdotnet\PB04\obj\Debug\net6.0\refint\PB04.d
 C:\Users\Kamil\Desktop\repositories\pbdotnet\PB04\obj\Debug\net6.0\PB04.pdb
 C:\Users\Kamil\Desktop\repositories\pbdotnet\PB04\obj\Debug\net6.0\PB04.genruntimeconfig.cache
 C:\Users\Kamil\Desktop\repositories\pbdotnet\PB04\obj\Debug\net6.0\ref\PB04.dll
+C:\Users\Kamil\Desktop\repositories\pbdotnet\PB04\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\Kamil\Desktop\repositories\pbdotnet\PB04\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\Kamil\Desktop\repositories\pbdotnet\PB04\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
